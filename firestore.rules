@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Note: Since the admin panel relies on a client-side localStorage flag ("osis123") 
+    // for this prototype, we're keeping the rules open for reading and writing to 
+    // allow the functionality to work. In a real-world scenario, you should implement 
+    // Firebase Authentication and restrict writes based on admin roles.
+    
+    match /aspirations/{document=**} {
+      allow read, write: if true;
+    }
+    
+    match /announcements/{document=**} {
+      allow read, write: if true;
+    }
+    
+    match /settings/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

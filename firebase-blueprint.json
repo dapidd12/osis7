@@ -1,0 +1,29 @@
+{
+  "collections": {
+    "aspirations": {
+      "description": "Store student aspirations",
+      "fields": {
+        "id": "string",
+        "category": "string",
+        "subject": "string",
+        "message": "string",
+        "isAnonymous": "boolean",
+        "authorName": "string",
+        "status": "string",
+        "createdAt": "timestamp",
+        "response": "string"
+      }
+    },
+    "announcements": {
+      "description": "Store OSIS announcements (Mading)",
+      "fields": {
+        "id": "string",
+        "title": "string",
+        "content": "string",
+        "author": "string",
+        "createdAt": "timestamp"
+      }
+    }
+  },
+  "indexes": []
+}
