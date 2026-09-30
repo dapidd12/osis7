@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { formatDistanceToNow } from 'date-fns';
 import { id as localeId } from 'date-fns/locale';
-import { Check, X, MessageCircleReply, Trash2, ChevronDown, ChevronUp, PieChart as PieChartIcon, Menu, ChevronLeft, ChevronRight, Loader2, Database, Eye, FileText, Maximize2 } from 'lucide-react';
+import { Check, X, MessageCircleReply, Trash2, ChevronDown, ChevronUp, PieChart as PieChartIcon, Menu, ChevronLeft, ChevronRight, Loader2, Database, Eye, FileText, Maximize2, History, RotateCcw, ExternalLink, Megaphone, LayoutDashboard } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { collection, query, where, orderBy, limit, startAfter, getDocs, getCountFromServer, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Aspiration } from '../types';
@@ -111,6 +111,15 @@ export default function AdminDashboard() {
     }
   }, []);
 
+  // Sync activeTab with aspirationFilter
+  useEffect(() => {
+    if (activeTab === 'disetujui') {
+      setAspirationFilter('Approved');
+    } else if (activeTab === 'aspirasi') {
+      setAspirationFilter(prev => (prev === 'Approved' ? 'Pending' : prev));
+    }
+  }, [activeTab]);
+
   // Fetch page 1 when filter changes or on mount
   useEffect(() => {
     pageCursorsRef.current = { 1: null };
@@ -173,45 +182,101 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Dashboard Admin</h1>
-        <p className="text-slate-500 mt-2">Kelola dan tanggapi aspirasi dari siswa dengan bijak.</p>
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Panel Administrasi OSIS</h1>
+            <span className="text-[11px] font-bold text-sky-800 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">
+              SMAN 1 Kemangkon
+            </span>
+          </div>
+          <p className="text-slate-500 text-sm mt-1">
+            Pusat pengelolaan, persetujuan, dan tanggapan resmi aspirasi siswa secara real-time.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <Link
+            to="/papan"
+            target="_blank"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all shadow-2xs"
+            title="Buka Papan Aspirasi Siswa"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+            <span>Lihat Papan Publik</span>
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+        <button
+          type="button"
+          onClick={() => { setActiveTab('aspirasi'); setAspirationFilter('Pending'); }}
+          className="text-left bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:border-slate-400 hover:shadow-md transition-all cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-slate-500">Total Aspirasi Masuk</p>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Semua Siswa</span>
           </div>
           <p className="text-4xl font-extrabold text-slate-900 mt-2">{stats.total}</p>
           <p className="text-xs text-slate-400 mt-1">Akumulasi seluruh pengirim di database</p>
-        </div>
-        <div className="bg-amber-50 p-6 rounded-3xl shadow-sm border border-amber-100">
+        </button>
+
+        <button
+          type="button"
+          onClick={() => { setActiveTab('aspirasi'); setAspirationFilter('Pending'); }}
+          className={cn(
+            "text-left p-6 rounded-3xl shadow-sm border transition-all cursor-pointer",
+            activeTab === 'aspirasi' && aspirationFilter === 'Pending'
+              ? "bg-amber-100/70 border-amber-300 ring-2 ring-amber-400/50 shadow-md"
+              : "bg-amber-50 border-amber-100 hover:border-amber-300 hover:shadow-md"
+          )}
+        >
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-amber-600">Perlu Ditinjau</p>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Pending</span>
+            <p className="text-sm font-semibold text-amber-700">Perlu Ditinjau</p>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Pending</span>
           </div>
           <p className="text-4xl font-extrabold text-amber-700 mt-2">{stats.pending}</p>
-          <p className="text-xs text-amber-600/70 mt-1">Aspirasi menunggu persetujuan</p>
-        </div>
-        <div className="bg-green-50 p-6 rounded-3xl shadow-sm border border-green-100">
+          <p className="text-xs text-amber-700/70 mt-1 font-medium">Aspirasi menunggu persetujuan &rarr;</p>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('disetujui')}
+          className={cn(
+            "text-left p-6 rounded-3xl shadow-sm border transition-all cursor-pointer",
+            activeTab === 'disetujui'
+              ? "bg-green-100/70 border-green-300 ring-2 ring-green-400/50 shadow-md"
+              : "bg-green-50 border-green-100 hover:border-green-300 hover:shadow-md"
+          )}
+        >
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-green-600">Disetujui</p>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Approved</span>
+            <p className="text-sm font-semibold text-green-700">Disetujui</p>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-800">Approved</span>
           </div>
           <p className="text-4xl font-extrabold text-green-700 mt-2">{stats.approved}</p>
-          <p className="text-xs text-green-600/70 mt-1">Aktif di Papan Aspirasi</p>
-        </div>
-        <div className="bg-red-50 p-6 rounded-3xl shadow-sm border border-red-100">
+          <p className="text-xs text-green-700/70 mt-1 font-medium">Buka Riwayat Disetujui &rarr;</p>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => { setActiveTab('aspirasi'); setAspirationFilter('Rejected'); }}
+          className={cn(
+            "text-left p-6 rounded-3xl shadow-sm border transition-all cursor-pointer",
+            activeTab === 'aspirasi' && aspirationFilter === 'Rejected'
+              ? "bg-red-100/70 border-red-300 ring-2 ring-red-400/50 shadow-md"
+              : "bg-red-50 border-red-100 hover:border-red-300 hover:shadow-md"
+          )}
+        >
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-red-600">Ditolak</p>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">Rejected</span>
           </div>
           <p className="text-4xl font-extrabold text-red-700 mt-2">{stats.rejected}</p>
-          <p className="text-xs text-red-600/70 mt-1">Aspirasi tidak dipublikasi</p>
-        </div>
+          <p className="text-xs text-red-600/70 mt-1 font-medium">Aspirasi tidak dipublikasi &rarr;</p>
+        </button>
       </div>
 
       {/* Chart Section */}
@@ -248,6 +313,62 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Main Tab Navigation */}
+      <div className="flex border-b border-slate-200 gap-2 pb-px overflow-x-auto">
+        <button
+          type="button"
+          onClick={() => { setActiveTab('aspirasi'); setAspirationFilter('Pending'); }}
+          className={cn(
+            "flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap cursor-pointer",
+            activeTab === 'aspirasi'
+              ? "border-sky-600 text-sky-600 bg-sky-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+          )}
+        >
+          <LayoutDashboard className="w-4 h-4" />
+          <span>Aspirasi Masuk</span>
+          {stats.pending > 0 && (
+            <span className="px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-800 font-extrabold">
+              {stats.pending}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('disetujui')}
+          className={cn(
+            "flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap cursor-pointer",
+            activeTab === 'disetujui'
+              ? "border-green-600 text-green-700 bg-green-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+          )}
+        >
+          <History className="w-4 h-4" />
+          <span>Riwayat Disetujui</span>
+          <span className="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 font-extrabold">
+            {stats.approved}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('mading')}
+          className={cn(
+            "flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap cursor-pointer",
+            activeTab === 'mading'
+              ? "border-sky-600 text-sky-600 bg-sky-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+          )}
+        >
+          <Megaphone className="w-4 h-4" />
+          <span>Kelola Mading</span>
+          <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-600 font-semibold">
+            {announcements.length}
+          </span>
+        </button>
+      </div>
 
 
 
@@ -301,10 +422,14 @@ export default function AdminDashboard() {
                 Menunggu ({stats.pending})
               </button>
               <button
-                onClick={() => setAspirationFilter('Approved')}
-                className={cn("px-4 py-2 text-sm font-bold rounded-xl transition-all", aspirationFilter === 'Approved' ? "bg-green-100 text-green-800" : "bg-slate-50 text-slate-500 hover:bg-slate-100")}
+                type="button"
+                onClick={() => setActiveTab('disetujui')}
+                className="px-4 py-2 text-sm font-bold rounded-xl transition-all bg-green-50 text-green-700 hover:bg-green-100 flex items-center gap-1.5 cursor-pointer"
+                title="Buka tab Riwayat Disetujui khusus pesan yang sudah disetujui"
               >
-                Disetujui ({stats.approved})
+                <History className="w-3.5 h-3.5" />
+                <span>Disetujui ({stats.approved})</span>
+                <span className="text-xs font-black">&rarr;</span>
               </button>
               <button
                 onClick={() => setAspirationFilter('Rejected')}
@@ -603,6 +728,408 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
+      ) : activeTab === 'disetujui' ? (
+        /* Riwayat Aspirasi Disetujui (Approved History) */
+        <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="p-6 sm:px-8 border-b border-slate-200 bg-gradient-to-r from-green-50/70 via-emerald-50/30 to-white">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+              <div>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-green-100 text-green-700 flex items-center justify-center">
+                    <History className="w-4 h-4" />
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900">Riwayat Aspirasi Disetujui</h2>
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-green-800 bg-green-100 border border-green-200 px-3 py-1 rounded-full">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    Tampil di Papan Publik
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-3xl leading-relaxed">
+                  Pesan aspirasi di bawah ini telah disetujui dan aktif tampil di Papan Aspirasi siswa. Pengurus OSIS tetap dapat <strong>memberi balasan</strong>, <strong>mengubah balasan</strong>, <strong>menarik kembali ke status pending</strong>, maupun <strong>menghapus aspirasi</strong> kapan saja.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/papan"
+                  target="_blank"
+                  className="flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 rounded-xl transition-all border border-sky-200 shadow-2xs shrink-0"
+                  title="Buka Papan Aspirasi Siswa di tab baru"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Lihat Papan Publik</span>
+                </Link>
+
+                {totalPages > 1 && (
+                  <div className="inline-flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl text-xs font-semibold text-slate-600 self-start sm:self-auto shadow-inner">
+                    <span className="px-2">Hal {aspirationPage} dari {totalPages}</span>
+                    <button
+                      onClick={handlePrevPage}
+                      disabled={aspirationPage === 1 || isLoadingDb}
+                      className="p-1 rounded-lg bg-white shadow-xs hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all"
+                      title="Halaman Sebelumnya"
+                    >
+                      <ChevronLeft className="w-4 h-4 text-slate-700" />
+                    </button>
+                    <button
+                      onClick={handleNextPage}
+                      disabled={aspirationPage === totalPages || isLoadingDb}
+                      className="p-1 rounded-lg bg-white shadow-xs hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all"
+                      title="Halaman Selanjutnya"
+                    >
+                      <ChevronRight className="w-4 h-4 text-slate-700" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick stats mini counters */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-green-100">
+              <div className="bg-white/80 border border-green-200/70 rounded-2xl p-3">
+                <p className="text-[11px] font-bold text-slate-500">Total Disetujui</p>
+                <p className="text-xl font-black text-slate-900 mt-0.5">{stats.approved} <span className="text-xs font-semibold text-slate-500">pesan</span></p>
+              </div>
+              <div className="bg-white/80 border border-green-200/70 rounded-2xl p-3">
+                <p className="text-[11px] font-bold text-sky-600">Sudah Diberi Balasan</p>
+                <p className="text-xl font-black text-sky-700 mt-0.5">
+                  {aspirations.filter(a => a.status === 'Approved' && a.response).length} <span className="text-xs font-semibold text-sky-600">pesan</span>
+                </p>
+              </div>
+              <div className="bg-white/80 border border-green-200/70 rounded-2xl p-3 col-span-2 sm:col-span-1">
+                <p className="text-[11px] font-bold text-amber-600">Belum Ada Balasan</p>
+                <p className="text-xl font-black text-amber-700 mt-0.5">
+                  {aspirations.filter(a => a.status === 'Approved' && !a.response).length} <span className="text-xs font-semibold text-amber-600">pesan</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {isLoadingDb ? (
+            <div className="p-16 text-center space-y-3">
+              <Loader2 className="w-8 h-8 text-green-600 animate-spin mx-auto" />
+              <p className="text-sm font-semibold text-slate-600">Memuat 5 pesan disetujui dari database...</p>
+            </div>
+          ) : pageAspirations.length === 0 ? (
+            <div className="p-16 text-center space-y-3">
+              <div className="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mx-auto">
+                <History className="w-7 h-7" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-800">Belum ada aspirasi yang disetujui</h3>
+              <p className="text-sm text-slate-500 max-w-md mx-auto">
+                Aspirasi yang Anda setujui di tab "Aspirasi Masuk" akan otomatis masuk ke sini dan tampil di papan aspirasi siswa.
+              </p>
+              <button
+                type="button"
+                onClick={() => { setActiveTab('aspirasi'); setAspirationFilter('Pending'); }}
+                className="mt-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                Ke Aspirasi Masuk &rarr;
+              </button>
+            </div>
+          ) : (
+            <div
+              key={`page-approved-${aspirationPage}`}
+              className={cn(
+                "divide-y divide-slate-100 transition-all duration-300",
+                slideDirection === 'next'
+                  ? "animate-in fade-in slide-in-from-right-6 duration-300"
+                  : "animate-in fade-in slide-in-from-left-6 duration-300"
+              )}
+            >
+              {pageAspirations.map((aspiration) => (
+                <div key={aspiration.id} className="p-6 sm:px-8 hover:bg-slate-50/50 transition-colors">
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2.5 mb-3">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-100 text-green-800 border border-green-200">
+                          Disetujui
+                        </span>
+                        <span className="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                          {aspiration.category}
+                        </span>
+                        <span className="text-xs text-slate-400">
+                          {formatDistanceToNow(new Date(aspiration.createdAt), { addSuffix: true, locale: localeId })}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug break-words">
+                        {aspiration.subject}
+                      </h3>
+
+                      {/* Pesan aspirasi: disingkat rapi secara default agar tidak penuh, dengan opsi baca selengkapnya */}
+                      {(() => {
+                        const isExpanded = !!expandedMessageIds[aspiration.id];
+                        const isLong = (aspiration.message?.length || 0) > 130 || aspiration.message?.includes('\n');
+
+                        if (!isLong) {
+                          return (
+                            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 my-3">
+                              <p className="text-sm text-slate-800 leading-relaxed break-words whitespace-pre-wrap">
+                                {aspiration.message}
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div className={cn(
+                            "border rounded-2xl p-4 my-3 transition-all duration-200",
+                            isExpanded 
+                              ? "bg-sky-50/40 border-sky-200/90 shadow-xs" 
+                              : "bg-slate-50/80 border-slate-200/80"
+                          )}>
+                            {isExpanded && (
+                              <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-sky-100 text-xs font-bold text-sky-800">
+                                <span className="flex items-center gap-1.5">
+                                  <FileText className="w-3.5 h-3.5 text-sky-600" />
+                                  Teks Pesan Lengkap:
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setReadingModalAspiration(aspiration)}
+                                  className="text-[11px] font-semibold text-sky-600 hover:text-sky-800 flex items-center gap-1 hover:underline cursor-pointer"
+                                  title="Buka tampilan modal dialog"
+                                >
+                                  <Maximize2 className="w-3 h-3" />
+                                  Buka Pop-up
+                                </button>
+                              </div>
+                            )}
+
+                            <p className={cn(
+                              "text-sm text-slate-800 leading-relaxed break-words",
+                              isExpanded ? "whitespace-pre-wrap" : "line-clamp-2 text-slate-700"
+                            )}>
+                              {aspiration.message}
+                            </p>
+
+                            <div className="flex items-center gap-2 mt-3 pt-1">
+                              <button
+                                type="button"
+                                onClick={() => toggleMessageExpand(aspiration.id)}
+                                className={cn(
+                                  "inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl transition-all shadow-2xs cursor-pointer",
+                                  isExpanded
+                                    ? "bg-white hover:bg-slate-100 text-slate-600 border border-slate-200"
+                                    : "bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200/80"
+                                )}
+                              >
+                                {isExpanded ? (
+                                  <>
+                                    <span>Tutup / Singkat Teks</span>
+                                    <ChevronUp className="w-3.5 h-3.5" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <Eye className="w-3.5 h-3.5" />
+                                    <span>Baca Selengkapnya</span>
+                                    <ChevronDown className="w-3.5 h-3.5" />
+                                  </>
+                                )}
+                              </button>
+
+                              {!isExpanded && (
+                                <button
+                                  type="button"
+                                  onClick={() => setReadingModalAspiration(aspiration)}
+                                  className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 px-2.5 py-1.5 rounded-xl transition-colors cursor-pointer"
+                                  title="Buka modal baca lengkap"
+                                >
+                                  <Maximize2 className="w-3 h-3" />
+                                  <span>Buka Pop-up</span>
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Status Tanggapan OSIS */}
+                      {aspiration.response ? (
+                        <div className="bg-sky-50 border border-sky-200/80 rounded-2xl p-4 mb-3">
+                          <div className="flex items-center justify-between mb-1.5 text-xs font-bold text-sky-900">
+                            <span className="flex items-center gap-2">
+                              <MessageCircleReply className="w-4 h-4 text-sky-600" />
+                              Tanggapan Resmi Pengurus OSIS:
+                            </span>
+                            <span className="text-[11px] font-medium text-sky-600 bg-sky-100/70 px-2 py-0.5 rounded-md">
+                              Tampil di Papan Siswa
+                            </span>
+                          </div>
+                          <p className="text-sm text-sky-950 whitespace-pre-wrap leading-relaxed">
+                            {aspiration.response}
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="bg-amber-50/70 border border-amber-200/70 rounded-2xl p-3 mb-3 text-xs text-amber-800 flex items-center justify-between">
+                          <span className="flex items-center gap-2">
+                            <MessageCircleReply className="w-4 h-4 text-amber-600" />
+                            Aspirasi ini belum memiliki balasan resmi dari OSIS.
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setExpandedId(aspiration.id);
+                              setResponseText('');
+                            }}
+                            className="font-bold text-amber-700 hover:underline hover:text-amber-900 text-xs cursor-pointer"
+                          >
+                            + Tulis Balasan Sekarang
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="text-sm font-medium text-slate-500 flex items-center gap-2 mt-2">
+                        <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs text-slate-600 font-bold">
+                          {aspiration.isAnonymous ? '?' : (aspiration.authorName?.charAt(0).toUpperCase() || 'S')}
+                        </div>
+                        Dari: <span className="font-semibold text-slate-700">{aspiration.isAnonymous ? 'Anonim (Identitas Dirahasiakan)' : aspiration.authorName}</span>
+                      </div>
+                    </div>
+
+                    {/* Action buttons specifically for Approved items */}
+                    <div className="flex flex-wrap items-center gap-2 pt-2 lg:pt-0 shrink-0">
+                      {/* Reply / Edit Reply button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (expandedId === aspiration.id) {
+                            setExpandedId(null);
+                          } else {
+                            setExpandedId(aspiration.id);
+                            setResponseText(aspiration.response || '');
+                          }
+                        }}
+                        className={cn(
+                          "flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all text-sm font-bold shadow-2xs cursor-pointer",
+                          aspiration.response 
+                            ? "bg-sky-100 text-sky-800 hover:bg-sky-200" 
+                            : "bg-amber-500 text-white hover:bg-amber-600"
+                        )}
+                        title={aspiration.response ? "Edit isi balasan OSIS" : "Beri balasan resmi OSIS"}
+                      >
+                        <MessageCircleReply className="w-4 h-4" />
+                        <span>{aspiration.response ? 'Edit Balasan' : 'Beri Balasan'}</span>
+                        {expandedId === aspiration.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      </button>
+
+                      {/* Revert / Tarik ke Pending button */}
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (window.confirm('Tarik aspirasi ini dari Papan Aspirasi publik dan kembalikan ke status Pending untuk ditinjau ulang?')) {
+                            await updateAspirationStatus(aspiration.id, 'Pending');
+                            loadAspirationsPage(aspirationPage, 'Approved', 'reset');
+                          }
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl transition-colors text-sm font-semibold cursor-pointer"
+                        title="Tarik kembali dari publik ke status Pending"
+                      >
+                        <RotateCcw className="w-4 h-4 text-slate-500" />
+                        <span>Tarik ke Pending</span>
+                      </button>
+
+                      {/* Delete button */}
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (window.confirm('Yakin ingin menghapus aspirasi yang sudah disetujui ini? Aspirasi akan dihapus secara permanen dari database dan papan publik.')) {
+                            await deleteAspiration(aspiration.id);
+                            loadAspirationsPage(aspirationPage, 'Approved', 'reset');
+                          }
+                        }}
+                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                        title="Hapus Aspirasi Permanen"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Expanded Section for Reply Form */}
+                  {expandedId === aspiration.id && (
+                    <div className="mt-6 pt-6 border-t border-slate-200 animate-in fade-in slide-in-from-top-2">
+                      <form onSubmit={(e) => handleResponseSubmit(e, aspiration.id)}>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <MessageCircleReply className="w-4 h-4 text-sky-600" />
+                            {aspiration.response ? 'Perbarui Tanggapan Resmi OSIS' : 'Tulis Tanggapan Resmi OSIS'}
+                          </label>
+                          <span className="text-xs text-slate-400">
+                            Tanggapan ini akan langsung diperbarui di Papan Aspirasi Siswa
+                          </span>
+                        </div>
+                        <textarea
+                          rows={4}
+                          value={responseText}
+                          onChange={e => setResponseText(e.target.value)}
+                          placeholder="Ketik tanggapan resmi dari OSIS di sini..."
+                          className="w-full px-5 py-4 bg-white border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all resize-none mb-4"
+                        />
+                        <div className="flex justify-end gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedId(null)}
+                            className="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                          >
+                            Batal
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-6 py-2.5 text-sm font-bold bg-sky-600 text-white hover:bg-sky-700 rounded-xl transition-colors shadow-sm cursor-pointer"
+                          >
+                            {aspiration.response ? 'Simpan Perubahan Balasan' : 'Kirim Balasan'}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination Controls for Approved History */}
+          {totalPages > 1 && (
+            <div className="p-4 sm:p-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/60">
+              <div className="flex items-center gap-2 text-sm text-slate-500 font-medium order-2 sm:order-1">
+                <Database className="w-4 h-4 text-green-500 shrink-0" />
+                <span>
+                  Menampilkan <strong className="text-slate-800">{(aspirationPage - 1) * itemsPerPage + 1}–{(aspirationPage - 1) * itemsPerPage + pageAspirations.length}</strong> dari <strong className="text-slate-800">{totalCount}</strong> aspirasi disetujui di database
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-2 order-1 sm:order-2">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={aspirationPage === 1 || isLoadingDb}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-white border border-slate-200 text-slate-700 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-all shadow-xs"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Sebelumnya</span>
+                </button>
+
+                <span className="px-3.5 py-2 bg-green-50 border border-green-200 text-green-800 rounded-xl text-xs font-bold shadow-xs">
+                  Hal {aspirationPage} / {totalPages}
+                </span>
+
+                <button
+                  onClick={handleNextPage}
+                  disabled={aspirationPage === totalPages || isLoadingDb}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-white border border-slate-200 text-slate-700 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-all shadow-xs"
+                >
+                  <span>Selanjutnya</span>
+                  {isLoadingDb ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-green-600" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       ) : activeTab === 'mading' ? (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
@@ -791,13 +1318,49 @@ export default function AdminDashboard() {
                         setReadingModalAspiration(null);
                         loadAspirationsPage(aspirationPage, aspirationFilter, 'reset');
                       }}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-xl transition-colors text-xs sm:text-sm font-bold shadow-xs"
+                      className="flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-xl transition-colors text-xs sm:text-sm font-bold shadow-xs cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                       Tolak
                     </button>
                   </>
                 )}
+
+                {readingModalAspiration.status === 'Approved' && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (window.confirm('Tarik aspirasi ini dari Papan Aspirasi publik dan kembalikan ke status Pending untuk ditinjau ulang?')) {
+                          await updateAspirationStatus(readingModalAspiration.id, 'Pending');
+                          setReadingModalAspiration(null);
+                          loadAspirationsPage(aspirationPage, aspirationFilter, 'reset');
+                        }
+                      }}
+                      className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl transition-colors text-xs sm:text-sm font-semibold cursor-pointer"
+                      title="Kembalikan status ke Pending"
+                    >
+                      <RotateCcw className="w-4 h-4 text-slate-500" />
+                      Tarik ke Pending
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (window.confirm('Yakin ingin menghapus aspirasi yang sudah disetujui ini? Tindakan ini permanen.')) {
+                          await deleteAspiration(readingModalAspiration.id);
+                          setReadingModalAspiration(null);
+                          loadAspirationsPage(aspirationPage, aspirationFilter, 'reset');
+                        }
+                      }}
+                      className="flex items-center gap-1.5 px-3.5 py-2 bg-red-50 text-red-700 hover:bg-red-100 rounded-xl transition-colors text-xs sm:text-sm font-bold cursor-pointer"
+                      title="Hapus aspirasi"
+                    >
+                      <Trash2 className="w-4 h-4 text-red-600" />
+                      Hapus
+                    </button>
+                  </>
+                )}
+
                 <button
                   type="button"
                   onClick={() => {
@@ -806,7 +1369,7 @@ export default function AdminDashboard() {
                     setExpandedId(asp.id);
                     setResponseText(asp.response || '');
                   }}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-sky-100 text-sky-800 hover:bg-sky-200 rounded-xl transition-colors text-xs sm:text-sm font-bold"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-sky-100 text-sky-800 hover:bg-sky-200 rounded-xl transition-colors text-xs sm:text-sm font-bold cursor-pointer"
                 >
                   <MessageCircleReply className="w-4 h-4" />
                   {readingModalAspiration.response ? 'Edit Tanggapan' : 'Beri Tanggapan'}

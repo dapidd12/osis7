@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, LogOut, MessageSquare, Menu, X } from 'lucide-react';
+import { LayoutDashboard, LogOut, MessageSquare, Menu, X, History } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export default function AdminLayout() {
@@ -77,6 +77,19 @@ export default function AdminLayout() {
           >
             <LayoutDashboard className="w-5 h-5" />
             <span className="font-medium">Aspirasi Masuk</span>
+          </Link>
+          <Link
+            to="/pengurus/dashboard?tab=disetujui"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={cn(
+              "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
+              location.search.includes('tab=disetujui')
+                ? "bg-green-600 text-white shadow-sm" 
+                : "text-slate-400 hover:bg-slate-800 hover:text-white"
+            )}
+          >
+            <History className="w-5 h-5" />
+            <span className="font-medium">Riwayat Disetujui</span>
           </Link>
           <Link
             to="/pengurus/dashboard?tab=mading"
