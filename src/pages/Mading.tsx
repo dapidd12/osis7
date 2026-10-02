@@ -3,10 +3,17 @@ import { useAppContext } from '../context/AppContext';
 import { formatDistanceToNow } from 'date-fns';
 import { id as localeId } from 'date-fns/locale';
 import { motion } from 'motion/react';
-import { Megaphone, Calendar, ShieldCheck, Pin } from 'lucide-react';
+import { Megaphone, Calendar, ShieldCheck, Pin, Instagram, MessageCircle, ArrowUpRight } from 'lucide-react';
+import { getInstagramUrl, getTikTokUrl, getWhatsAppUrl } from '../lib/socialUtils';
 
 export default function Mading() {
-  const { announcements } = useAppContext();
+  const { announcements, settings } = useAppContext();
+
+  const igUrl = getInstagramUrl(settings.socialLinks?.instagram || '');
+  const ttUrl = getTikTokUrl(settings.socialLinks?.tiktok || '');
+  const waUrl = settings.socialLinks?.whatsapp 
+    ? getWhatsAppUrl(settings.socialLinks.whatsapp, settings.socialLinks.whatsappMessage)
+    : null;
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
@@ -30,6 +37,44 @@ export default function Mading() {
         <p className="text-slate-600 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
           Temukan pengumuman penting, jadwal kegiatan kesiswaan, dan berita terkini langsung dari Pengurus OSIS.
         </p>
+
+        {/* Social media callout */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={igUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 transition-colors"
+          >
+            <Instagram className="w-3.5 h-3.5" />
+            <span>{settings.socialLinks?.instagram || '@osissman1kemangkon'}</span>
+            <ArrowUpRight className="w-3 h-3 text-pink-500" />
+          </a>
+
+          <a
+            href={ttUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-colors"
+          >
+            <span className="text-[10px] font-black">TT</span>
+            <span>{settings.socialLinks?.tiktok || '@osis_smansakemangkon'}</span>
+            <ArrowUpRight className="w-3 h-3 text-slate-500" />
+          </a>
+
+          {waUrl && (
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+              <span>CS WhatsApp</span>
+              <ArrowUpRight className="w-3 h-3 text-emerald-500" />
+            </a>
+          )}
+        </div>
       </motion.div>
 
       {announcements.length > 0 ? (

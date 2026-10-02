@@ -11,6 +11,7 @@ export interface Aspiration {
   status: AspirationStatus;
   createdAt: string;
   response?: string;
+  activityTopic?: string; // Judul kegiatan / topik aspirasi, e.g. "Umum" or "Class Meeting 2026"
 }
 
 export interface Announcement {
@@ -19,4 +20,23 @@ export interface Announcement {
   content: string;
   author: string;
   createdAt: string;
+}
+
+export interface SystemSocialLinks {
+  instagram: string;
+  tiktok: string;
+  whatsapp: string;
+  whatsappMessage?: string;
+}
+
+export interface SystemSettings {
+  isMaintenanceMode: boolean;
+  maintenanceMessage: string;
+  isAspirationOpen: boolean;
+  aspirationClosedMessage: string;
+  activityTopic: string; // Judul / nama kegiatan aspirasi aktif, default "Umum"
+  activityTopicDescription?: string; // Deskripsi singkat kegiatan jika ada
+  socialLinks: SystemSocialLinks;
+  updatedAt?: string;
+  updatedBy?: string;
 }
