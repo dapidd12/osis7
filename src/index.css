@@ -1,0 +1,343 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Baloo 2", "Outfit", system-ui, sans-serif;
+  --font-sans: "Outfit", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --color-warm-bg: #faf7f2;
+  --color-warm-card: #ffffff;
+  --color-warm-ink: #0f2933;
+  --color-warm-muted: #526b74;
+  --color-warm-light: #8fa3ab;
+  --color-warm-border: #e8e2d8;
+
+  --color-warm-amber: #f59e0b;
+  --color-warm-amber-soft: #fef3c7;
+  --color-warm-rose: #f43f5e;
+  --color-warm-rose-soft: #ffe4e6;
+  --color-warm-sky: #0284c7;
+  --color-warm-sky-soft: #e0f2fe;
+  --color-warm-emerald: #10b981;
+  --color-warm-emerald-soft: #d1fae5;
+  --color-warm-violet: #8b5cf6;
+  --color-warm-violet-soft: #ede9fe;
+
+  /* Aliases. Several components already referenced these names before they
+     existed, which is why parts of the page rendered unstyled (a transparent
+     welcome bar, borders that were never drawn). One name per role now. */
+  --color-ink: var(--color-warm-ink);
+  --color-ink-soft: var(--color-warm-muted);
+  --color-gold: var(--color-warm-amber);
+  --color-gold-soft: var(--color-warm-amber-soft);
+  --color-cream: #fffaf1;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-float-reverse: float-reverse 7s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 3s ease-in-out infinite;
+  --animate-marquee: marquee 35s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes float-reverse {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.04); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes tape-slide {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-warm-bg);
+    color: var(--color-warm-ink);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(245, 158, 11, 0.08) 0%, transparent 45%),
+      radial-gradient(circle at 88% 10%, rgba(2, 132, 199, 0.08) 0%, transparent 45%),
+      radial-gradient(circle at 50% 95%, rgba(244, 63, 94, 0.06) 0%, transparent 55%);
+    /* Fixed attachment repaints the whole texture on every scroll frame, which
+       is what turned a decorative gradient into continuous work. The gradient
+       is anchored to the body background box instead, and scrolls with it. */
+    background-repeat: no-repeat;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 860px) {
+    /* A texture that never changes on a small battery is not worth the paint. */
+    body { background-image: none; }
+  }
+
+  ::selection {
+    background-color: #f43f5e;
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #f59e0b;
+    outline-offset: 3px;
+    border-radius: 12px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(15, 41, 51, 0.18);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(15, 41, 51, 0.35);
+  }
+
+  input, textarea, select {
+    caret-color: #f43f5e;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+
+  /* Soft, Luminous Glass & Surface Classes */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px -5px rgba(15, 41, 51, 0.06), 0 4px 12px -2px rgba(15, 41, 51, 0.02);
+  }
+
+  .glass-card-hover {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+  }
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(15, 41, 51, 0.09), 0 8px 16px -4px rgba(15, 41, 51, 0.03);
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+
+  .glass-pill {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(15, 41, 51, 0.04);
+  }
+
+  /* Friendly Smooth Elevation Shadows */
+  .shadow-warm-sm {
+    box-shadow: 0 2px 8px -2px rgba(15, 41, 51, 0.04), 0 1px 4px -1px rgba(15, 41, 51, 0.02);
+  }
+  .shadow-warm {
+    box-shadow: 0 10px 28px -6px rgba(15, 41, 51, 0.06), 0 4px 10px -2px rgba(15, 41, 51, 0.02);
+  }
+  .shadow-warm-lg {
+    box-shadow: 0 20px 45px -10px rgba(15, 41, 51, 0.09), 0 8px 18px -4px rgba(15, 41, 51, 0.03);
+  }
+
+  /* Soft Glow Accents */
+  .shadow-glow-amber {
+    box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.25);
+  }
+  .shadow-glow-rose {
+    box-shadow: 0 8px 24px -4px rgba(244, 63, 94, 0.25);
+  }
+  .shadow-glow-emerald {
+    box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.25);
+  }
+  .shadow-glow-sky {
+    box-shadow: 0 8px 24px -4px rgba(2, 132, 199, 0.25);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: var(--animate-marquee);
+  }
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* =========================================================== MOTION BUDGET ==
+   The page used to loop. Nothing told any of it to stop: floating badges,
+   pulsing dots, an endless marquee duplicated eight times per page view. An
+   animation nobody asked for is not decoration, it is a permanent frame budget
+   every other animation on the page pays for.
+
+   The rule now: motion is either driven by the reader's scroll, or it is a
+   one-shot entrance. Loops are opt-in through `.motion-allow`, and they only
+   run on a pointer device that has not asked for reduced motion. */
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .animate-float,
+  .animate-float-reverse,
+  .animate-float-slow,
+  .animate-pulse-soft,
+  .animate-ping,
+  .marquee-track {
+    animation: none;
+  }
+  /* Ping is a state signal, so it keeps its dot but stops pinging. */
+  .animate-ping {
+    opacity: 0.55;
+  }
+  /* Endless tape, but no endless pause: resting at 0 is the readable frame. */
+  .marquee-track {
+    transform: translate3d(0, 0, 0);
+  }
+  /* Scroll-linked parallax and tilt are position changes; drop them. */
+  [data-sc-parallax],
+  [data-sc-tilt] {
+    transform: none;
+  }
+}
+
+/* ============================================================ LANDING ACTS ==
+   Only the scroll mechanism lives here. Everything visual is Tailwind in the
+   component, so the composition can be read from the markup alone. */
+
+/* A pinned stage is the act's frame. It must stay sticky (the engine warns if
+   anything overrides position) and it owns exactly one viewport of layout. */
+.lp-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: clip;
+}
+
+/* Cues are pre-painted invisible by the engine; this only hints the compositor
+   that the two properties about to change are the only two. */
+.lp-cue {
+  will-change: opacity, transform;
+}
+
+/* ---- the signature move ---------------------------------------------------
+   A sheet of paper folds flat and drops into the box. Every phase is arithmetic
+   on --sc-p, which the engine already publishes on the act element, so the
+   interaction costs one custom property read and no scroll listener at all.
+
+   Written without min()/max(): those are not valid in opacity or in a scale()
+   factor in every browser that still ships, and a silently invalid declaration
+   here means a paper that never moves. Affine transforms only, and the paper
+   sinks from its resting place rather than being clamped against a box. */
+.lp-pass {
+  --p: var(--sc-p, 0);
+}
+
+.lp-paper {
+  transform:
+    translate3d(calc(var(--p) * 0.9rem), calc(var(--p) * 5rem), 0)
+    rotate(calc(-7deg + var(--p) * 9deg))
+    scale(calc(1 - var(--p) * 0.08));
+  opacity: calc(1 - var(--p) * 0.55);
+}
+
+.lp-paper__flap {
+  transform: rotateX(calc(var(--p) * -92deg));
+  transform-origin: 50% 100%;
+}
+
+.lp-paper__shadow {
+  transform: scale(calc(1 - var(--p) * 0.3));
+  opacity: calc(0.2 + var(--p) * 0.22);
+}
+
+/* The box lifts a little to meet the paper, then settles. */
+.lp-box {
+  transform: translate3d(0, calc(var(--p) * -0.8rem), 0);
+}
+
+/* The catch: a light and a ring arrive on the last third. */
+.lp-catch {
+  opacity: calc((var(--p) - 0.62) * 2.6);
+}
+
+.lp-count {
+  opacity: calc((var(--p) - 0.5) * 2);
+}
+
+/* Under reduced motion the fold still happens (it is the story), but the
+   travel, the rotation and the glow are gone: the paper starts folded, the box
+   receives it, and the copy says what a screen reader hears. */
+@media (prefers-reduced-motion: reduce) {
+  .lp-paper,
+  .lp-paper__flap,
+  .lp-paper__shadow,
+  .lp-box {
+    transform: none;
+  }
+  .lp-paper,
+  .lp-catch,
+  .lp-count {
+    opacity: 1;
+  }
+}
+
+/* Graph paper. One repeating gradient pair, no image request, no repaint. */
+.lp-grid {
+  background-image:
+    linear-gradient(to right, rgba(15, 41, 51, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 41, 51, 0.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 38%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 78% 62% at 50% 38%, #000 30%, transparent 78%);
+}
+
+/* The opening screen's three planes. Depth here is arrival order, not idle
+   float: the note strip lands, then the headline, then the crest card. Each is
+   a one-shot translate of 10 to 18px, and each is complete in under half a
+   second, so the page is readable before the reader has finished the first
+   sentence. */
+@media (prefers-reduced-motion: no-preference) {
+  .lp-hero-note,
+  .lp-hero-subject,
+  .lp-hero-fore {
+    animation: lp-land 520ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .lp-hero-subject { animation-delay: 60ms; }
+  .lp-hero-fore    { animation-delay: 140ms; }
+}
+
+@keyframes lp-land {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Every act card in the page body is a flow section: it fades and rises once,
+   then it is done. Content that re-hides when the reader scrolls back up is a
+   defect, which is why viewport.once is the default in the wrapper. */

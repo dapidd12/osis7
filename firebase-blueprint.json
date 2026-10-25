@@ -1,0 +1,58 @@
+{
+  "collections": {
+    "aspirations": {
+      "description": "Store student aspirations",
+      "fields": {
+        "id": "string",
+        "category": "string",
+        "subject": "string",
+        "message": "string",
+        "isAnonymous": "boolean",
+        "authorName": "string",
+        "status": "string",
+        "createdAt": "timestamp",
+        "response": "string",
+        "activityTopic": "string",
+        "submissionType": "string"
+      }
+    },
+    "announcements": {
+      "description": "Store OSIS announcements (Mading)",
+      "fields": {
+        "id": "string",
+        "title": "string",
+        "content": "string",
+        "author": "string",
+        "createdAt": "timestamp"
+      }
+    },
+    "settings": {
+      "description": "Store application system settings including operational mode and social links",
+      "fields": {
+        "siteMode": "string",
+        "isMaintenanceMode": "boolean",
+        "maintenanceMessage": "string",
+        "isAspirationOpen": "boolean",
+        "aspirationClosedMessage": "string",
+        "activityTopic": "string",
+        "activityTopicDescription": "string",
+        "socialLinks": "map",
+        "updatedAt": "timestamp",
+        "updatedBy": "string"
+      }
+    },
+    "submission_limits": {
+      "description": "Store daily IP rate limit per 06:00 AM cycle",
+      "fields": {
+        "id": "string",
+        "ip": "string",
+        "cycleId": "string",
+        "count": "number",
+        "mode": "string",
+        "submittedAt": "timestamp",
+        "nextResetTime": "string"
+      }
+    }
+  },
+  "indexes": []
+}
