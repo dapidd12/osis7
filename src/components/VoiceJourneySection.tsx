@@ -42,10 +42,6 @@ export default function VoiceJourneySection() {
     >
       <div className="lp-stage flex items-center justify-center px-4 sm:px-6">
         <div className="mx-auto w-full max-w-5xl">
-          <p className="mb-8 text-center text-[11px] font-bold uppercase tracking-[0.16em] text-amber-700">
-            Alur suara
-          </p>
-
           <div className="grid items-center gap-8 md:grid-cols-[1fr_13rem_1fr] md:gap-6">
             {/* what goes in */}
             <div className="space-y-4 md:justify-self-end md:text-right" data-sc-cue="0 1 0.18 0">
@@ -110,9 +106,6 @@ export default function VoiceJourneySection() {
 
             {/* what comes out */}
             <div className="space-y-3 md:justify-self-start" data-sc-cue="0.42">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-amber-700">
-                Yang keluar
-              </p>
               <ol className="space-y-2.5">
                 {OUTGOING.map((step, i) => (
                   <li key={step} className="flex items-start gap-3">

@@ -491,334 +491,306 @@ export default function KirimAspirasi() {
              ground rather than on a card: a card here would make the form read
              as the second half of a marketing section. */}
       <div className="mx-auto mt-16 max-w-3xl sm:mt-24">
-        <div className="mb-8 flex flex-col gap-3 border-t border-amber-900/10 pt-8 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="m-0 text-[11px] font-bold uppercase tracking-[0.16em] text-amber-700">
-              Formulir
-            </p>
-            <h2 className="m-0 mt-2 font-display text-2xl font-black tracking-tight text-warm-ink sm:text-3xl">
-              {isEvaluationMode ? 'Tulis lembar evaluasimu' : 'Tulis aspirasimu'}
-            </h2>
-          </div>
-          <p className="m-0 max-w-[34ch] text-xs leading-relaxed text-warm-muted sm:text-right">
+        <div className="mb-8 border-t border-amber-900/10 pt-8">
+          <h2 className="m-0 font-display text-2xl font-black tracking-tight text-warm-ink sm:text-3xl">
+            {isEvaluationMode ? 'Tulis lembar evaluasimu' : 'Tulis aspirasimu'}
+          </h2>
+          <p className="m-0 mt-2 max-w-[46ch] text-xs leading-relaxed text-warm-muted sm:text-sm">
             Empat bagian, sekitar dua menit. Bisa kamu hentikan kapan saja sebelum
             tombol kirim ditekan.
           </p>
         </div>
 
       {/* MAIN SUBMISSION FORM */}
-      <div ref={formRef}>
-        <Reveal className="glass-card rounded-[2.5rem] p-6 sm:p-10 md:p-12 shadow-warm-lg border border-white/90 space-y-8 relative">
-          {validationError && (
-            <motion.div 
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-4 bg-rose-50 border border-rose-200/90 rounded-2xl text-rose-800 text-sm flex items-start gap-3 shadow-xs"
-            >
-              <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-              <span className="font-semibold">{validationError}</span>
-            </motion.div>
-          )}
+        <div ref={formRef}>
+          <Reveal className="glass-card rounded-[2.5rem] p-6 sm:p-10 md:p-12 shadow-warm-lg border border-white/90 space-y-8 relative">
+            {validationError && (
+              <motion.div 
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-rose-50 border border-rose-200/90 rounded-2xl text-rose-800 text-sm flex items-start gap-3 shadow-xs"
+              >
+                <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                <span className="font-semibold">{validationError}</span>
+              </motion.div>
+            )}
 
-          {/* Form Header */}
-          <div className="border-b border-amber-900/10 pb-6 space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
-              📝 {isEvaluationMode ? 'Formulir Evaluasi Kinerja' : 'Formulir Aspirasi & Curhat Siswa'}
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-display font-black text-warm-ink tracking-tight">
-              {isEvaluationMode ? 'Tulis Masukan Evaluasi' : 'Tuliskan Cerita atau Ide Kreatifmu'}
-            </h2>
-            <p className="text-xs sm:text-sm text-warm-muted leading-relaxed">
-              Semua masukan akan dibaca dengan seksama oleh Pengurus OSIS. Isi formulir dengan santun dan objektif.
-            </p>
-          </div>
+            {/* Form Header */}
+            <div className="border-b border-amber-900/10 pb-6">
+              <p className="text-xs sm:text-sm text-warm-muted leading-relaxed">
+                Semua masukan akan dibaca dengan seksama oleh Pengurus OSIS. Isi formulir dengan santun dan objektif.
+              </p>
+            </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* STEP 1: Topik Kegiatan Terkait */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* STEP 1: Topik Kegiatan Terkait */}
+              <div className="space-y-3">
                 <label className="text-sm font-display font-bold text-warm-ink flex items-center gap-2">
                   <Tag className="w-4 h-4 text-amber-600" />
                   <span>{isEvaluationMode ? '1. Agenda Kegiatan yang Dievaluasi' : '1. Agenda / Topik Terkait'}</span>
                 </label>
-                <span className="text-[11px] font-semibold text-warm-muted">
-                  Otomatis Menyesuaikan
-                </span>
-              </div>
 
-              <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/60 border border-amber-200/70 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-white">
-                        {isEvaluationMode ? 'Agenda Evaluasi' : 'Agenda OSIS'}
-                      </span>
-                      <span className="text-xs font-semibold text-warm-muted">
-                        {settings.activityTopic && settings.activityTopic !== 'Umum' 
-                          ? 'Kegiatan Khusus' 
-                          : 'Aspirasi Kesiswaan Umum'}
-                      </span>
+                <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/60 border border-amber-200/70 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-base sm:text-lg font-display font-bold text-warm-ink">
+                        {settings.activityTopic || (isEvaluationMode ? 'Evaluasi Program Kerja OSIS' : 'Umum (Kesiswaan & Sekolah)')}
+                      </h3>
+                      {settings.activityTopicDescription && (
+                        <p className="text-xs text-warm-muted mt-1 leading-relaxed">
+                          {settings.activityTopicDescription}
+                        </p>
+                      )}
                     </div>
-                    <h3 className="text-base sm:text-lg font-display font-bold text-warm-ink">
-                      {settings.activityTopic || (isEvaluationMode ? 'Evaluasi Program Kerja OSIS' : 'Umum (Kesiswaan & Sekolah)')}
-                    </h3>
-                    {settings.activityTopicDescription && (
-                      <p className="text-xs text-warm-muted mt-1 leading-relaxed">
-                        {settings.activityTopicDescription}
-                      </p>
+
+                    {/* Tag choices if a special activity is active */}
+                    {settings.activityTopic && settings.activityTopic !== 'Umum' && (
+                      <div className="flex items-center gap-1.5 bg-white/90 p-1.5 rounded-xl border border-amber-200/80 shrink-0 self-start sm:self-auto shadow-2xs">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedTopic(settings.activityTopic)}
+                          className={cn(
+                            "px-3 py-1.5 rounded-lg text-xs font-display font-bold transition-all cursor-pointer",
+                            selectedTopic === settings.activityTopic
+                              ? "bg-amber-500 text-white shadow-xs"
+                              : "text-warm-muted hover:text-warm-ink hover:bg-amber-50"
+                          )}
+                        >
+                          Ikuti Agenda
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedTopic('Umum')}
+                          className={cn(
+                            "px-3 py-1.5 rounded-lg text-xs font-display font-bold transition-all cursor-pointer",
+                            selectedTopic === 'Umum'
+                              ? "bg-warm-ink text-white shadow-xs"
+                              : "text-warm-muted hover:text-warm-ink hover:bg-amber-50"
+                          )}
+                        >
+                          Topik Umum
+                        </button>
+                      </div>
                     )}
                   </div>
+                </div>
+              </div>
 
-                  {/* Tag choices if a special activity is active */}
-                  {settings.activityTopic && settings.activityTopic !== 'Umum' && (
-                    <div className="flex items-center gap-1.5 bg-white/90 p-1.5 rounded-xl border border-amber-200/80 shrink-0 self-start sm:self-auto shadow-2xs">
+              {/* STEP 2: Category Selector */}
+              <div className="pt-2 border-t border-amber-900/10 space-y-3">
+                <div className="flex items-baseline justify-between">
+                  <label className="text-sm font-display font-bold text-warm-ink">
+                    {isEvaluationMode ? '2. Pilih Kategori Evaluasi' : '2. Pilih Jenis Aspirasimu'} <span className="text-rose-500">*</span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {categoryOptions.map(({ label, icon: Icon, desc, activeHalo, iconStyle }) => {
+                    const isSelected = category === label;
+                    return (
+                      <button
+                        key={label}
+                        type="button"
+                        onClick={() => { setCategory(label); setValidationError(null); }}
+                        className={cn(
+                          "p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between gap-3 relative",
+                          isSelected
+                            ? activeHalo
+                            : "bg-white/80 border-slate-200/90 hover:border-amber-300 hover:bg-amber-50/30 hover:shadow-warm-sm"
+                        )}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconStyle} shadow-2xs`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          {isSelected && (
+                            <span className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs">
+                              <Check className="w-3.5 h-3.5 stroke-[3]" />
+                            </span>
+                          )}
+                        </div>
+
+                        <div>
+                          <p className="font-display font-bold text-sm text-warm-ink">
+                            {label}
+                          </p>
+                          <p className="text-[11px] text-warm-muted leading-tight mt-0.5 line-clamp-2">
+                            {desc}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* STEP 3: Judul & Isi Pesan */}
+              <div className="pt-2 border-t border-amber-900/10 space-y-5">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="subject" className="text-sm font-display font-bold text-warm-ink">
+                      {isEvaluationMode ? '3. Judul Pokok Evaluasi' : '3. Judul Aspirasi / Ide'} <span className="text-rose-500">*</span>
+                    </label>
+                    <span className="text-xs font-mono text-warm-light">{subject.length}/80</span>
+                  </div>
+                  <input
+                    id="subject"
+                    type="text"
+                    required
+                    maxLength={80}
+                    value={subject}
+                    onChange={e => { setSubject(e.target.value); setValidationError(null); }}
+                    placeholder={
+                      isEvaluationMode
+                        ? `Contoh: Evaluasi Sarana dan Waktu Mulai ${selectedTopic !== 'Umum' ? selectedTopic : 'Kegiatan OSIS'}`
+                        : (selectedTopic !== 'Umum' 
+                            ? `Contoh: Usulan Lomba Mini Soccer di ${selectedTopic}` 
+                            : "Contoh: Usulan Perbaikan Kipas Angin dan Buku di Ruang Baca")
+                    }
+                    className="w-full px-4 py-3.5 bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 shadow-warm-sm font-sans font-medium text-warm-ink placeholder:text-warm-light text-sm transition-all"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="message" className="text-sm font-display font-bold text-warm-ink">
+                      {isEvaluationMode ? '4. Uraian Detail Masukan' : '4. Uraian Lengkap Cerita / Aspirasi'} <span className="text-rose-500">*</span>
+                    </label>
+                    <span className="text-xs font-mono text-warm-light">{message.length}/1000</span>
+                  </div>
+                  <textarea
+                    id="message"
+                    required
+                    rows={5}
+                    maxLength={1000}
+                    value={message}
+                    onChange={e => { setMessage(e.target.value); setValidationError(null); }}
+                    placeholder={
+                      isEvaluationMode
+                        ? "Jelaskan kendala apa yang terjadi, mengapa hal tersebut menjadi catatan, serta apa saran rekomendasi perbaikan untuk kepengurusan OSIS..."
+                        : "Ceritakan saran, keluhan fasilitas, uneg-uneg, atau ide kreatifmu secara nyaman dan jelas..."
+                    }
+                    className="w-full px-4 py-3.5 bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 shadow-warm-sm font-sans font-medium text-warm-ink placeholder:text-warm-light text-sm resize-none leading-relaxed transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* STEP 4: Mode Anonim vs Tampilkan Nama */}
+              <div className="pt-2 border-t border-amber-900/10">
+                <div className="bg-amber-50/50 p-5 rounded-2xl border border-amber-200/60 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <p className="font-display font-bold text-sm text-warm-ink">Privasi & Identitas Pengirim</p>
+                      <p className="text-xs text-warm-muted mt-0.5 leading-relaxed">
+                        {isAnonymous 
+                          ? "Identitasmu dirahasiakan 100%. Nama dan data pribadi tidak akan pernah dipublikasikan." 
+                          : `Namamu akan ditampilkan secara terbuka pada kartu ${isEvaluationMode ? 'evaluasi' : 'aspirasi'}.`}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-amber-200/80 shrink-0 self-start sm:self-auto shadow-2xs">
                       <button
                         type="button"
-                        onClick={() => setSelectedTopic(settings.activityTopic)}
+                        onClick={() => setIsAnonymous(true)}
                         className={cn(
-                          "px-3 py-1.5 rounded-lg text-xs font-display font-bold transition-all cursor-pointer",
-                          selectedTopic === settings.activityTopic
-                            ? "bg-amber-500 text-white shadow-xs"
+                          "px-3.5 py-1.5 rounded-xl text-xs font-display font-bold transition-all cursor-pointer",
+                          isAnonymous 
+                            ? "bg-warm-ink text-white shadow-warm-sm" 
                             : "text-warm-muted hover:text-warm-ink hover:bg-amber-50"
                         )}
                       >
-                        Ikuti Agenda
+                        🎭 Anonim (Rahasia)
                       </button>
                       <button
                         type="button"
-                        onClick={() => setSelectedTopic('Umum')}
+                        onClick={() => setIsAnonymous(false)}
                         className={cn(
-                          "px-3 py-1.5 rounded-lg text-xs font-display font-bold transition-all cursor-pointer",
-                          selectedTopic === 'Umum'
-                            ? "bg-warm-ink text-white shadow-xs"
+                          "px-3.5 py-1.5 rounded-xl text-xs font-display font-bold transition-all cursor-pointer",
+                          !isAnonymous 
+                            ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-warm-sm" 
                             : "text-warm-muted hover:text-warm-ink hover:bg-amber-50"
                         )}
                       >
-                        Topik Umum
+                        👤 Tampilkan Nama
                       </button>
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
+                  </div>
 
-            {/* STEP 2: Category Selector */}
-            <div className="pt-2 border-t border-amber-900/10 space-y-3">
-              <div className="flex items-baseline justify-between">
-                <label className="text-sm font-display font-bold text-warm-ink">
-                  {isEvaluationMode ? '2. Pilih Kategori Evaluasi' : '2. Pilih Jenis Aspirasimu'} <span className="text-rose-500">*</span>
-                </label>
-                <span className="text-xs text-warm-muted">Pilih 1 yang paling sesuai</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {categoryOptions.map(({ label, icon: Icon, desc, activeHalo, iconStyle }) => {
-                  const isSelected = category === label;
-                  return (
-                    <button
-                      key={label}
-                      type="button"
-                      onClick={() => { setCategory(label); setValidationError(null); }}
-                      className={cn(
-                        "p-4 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between gap-3 relative",
-                        isSelected
-                          ? activeHalo
-                          : "bg-white/80 border-slate-200/90 hover:border-amber-300 hover:bg-amber-50/30 hover:shadow-warm-sm"
-                      )}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconStyle} shadow-2xs`}>
-                          <Icon className="w-4 h-4" />
+                  <AnimatePresence>
+                    {!isAnonymous && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden pt-3 border-t border-amber-200/60"
+                      >
+                        <label htmlFor="authorName" className="block text-xs font-bold text-warm-ink mb-1.5">
+                          Nama Lengkap / Panggilan & Kelas Siswa
+                        </label>
+                        <div className="relative">
+                          <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-light" />
+                          <input
+                            id="authorName"
+                            type="text"
+                            required={!isAnonymous}
+                            value={authorName}
+                            onChange={e => setAuthorName(e.target.value)}
+                            placeholder="Contoh: Budi Santoso (XI IPS 1)"
+                            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-amber-400 text-sm font-medium text-warm-ink"
+                          />
                         </div>
-                        {isSelected && (
-                          <span className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs">
-                            <Check className="w-3.5 h-3.5 stroke-[3]" />
-                          </span>
-                        )}
-                      </div>
-
-                      <div>
-                        <p className="font-display font-bold text-sm text-warm-ink">
-                          {label}
-                        </p>
-                        <p className="text-[11px] text-warm-muted leading-tight mt-0.5 line-clamp-2">
-                          {desc}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* STEP 3: Judul & Isi Pesan */}
-            <div className="pt-2 border-t border-amber-900/10 space-y-5">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="subject" className="text-sm font-display font-bold text-warm-ink">
-                    {isEvaluationMode ? '3. Judul Pokok Evaluasi' : '3. Judul Aspirasi / Ide'} <span className="text-rose-500">*</span>
-                  </label>
-                  <span className="text-xs font-mono text-warm-light">{subject.length}/80</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <input
-                  id="subject"
-                  type="text"
-                  required
-                  maxLength={80}
-                  value={subject}
-                  onChange={e => { setSubject(e.target.value); setValidationError(null); }}
-                  placeholder={
-                    isEvaluationMode
-                      ? `Contoh: Evaluasi Sarana dan Waktu Mulai ${selectedTopic !== 'Umum' ? selectedTopic : 'Kegiatan OSIS'}`
-                      : (selectedTopic !== 'Umum' 
-                          ? `Contoh: Usulan Lomba Mini Soccer di ${selectedTopic}` 
-                          : "Contoh: Usulan Perbaikan Kipas Angin dan Buku di Ruang Baca")
-                  }
-                  className="w-full px-4 py-3.5 bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 shadow-warm-sm font-sans font-medium text-warm-ink placeholder:text-warm-light text-sm transition-all"
-                />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="message" className="text-sm font-display font-bold text-warm-ink">
-                    {isEvaluationMode ? '4. Uraian Detail Masukan' : '4. Uraian Lengkap Cerita / Aspirasi'} <span className="text-rose-500">*</span>
-                  </label>
-                  <span className="text-xs font-mono text-warm-light">{message.length}/1000</span>
+              {/* Friendly Guidelines */}
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-sky-50/70 border border-sky-100 text-xs leading-relaxed text-sky-950">
+                <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="font-bold text-sky-950">Komitmen Bersama: </strong>
+                  <span>
+                    {isEvaluationMode
+                      ? 'Evaluasi yang disampaikan secara santun, objektif, dan konstruktif akan menjadi prioritas pembahasan rapat pengurus OSIS.'
+                      : 'Gunakan bahasa yang santun, saling menghargai, dan objektif demi menjaga lingkungan SMAN 1 Kemangkon yang harmonis dan menyenangkan.'}
+                  </span>
                 </div>
-                <textarea
-                  id="message"
-                  required
-                  rows={5}
-                  maxLength={1000}
-                  value={message}
-                  onChange={e => { setMessage(e.target.value); setValidationError(null); }}
-                  placeholder={
-                    isEvaluationMode
-                      ? "Jelaskan kendala apa yang terjadi, mengapa hal tersebut menjadi catatan, serta apa saran rekomendasi perbaikan untuk kepengurusan OSIS..."
-                      : "Ceritakan saran, keluhan fasilitas, uneg-uneg, atau ide kreatifmu secara nyaman dan jelas..."
-                  }
-                  className="w-full px-4 py-3.5 bg-white/90 border border-slate-200/90 rounded-2xl focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-400/10 shadow-warm-sm font-sans font-medium text-warm-ink placeholder:text-warm-light text-sm resize-none leading-relaxed transition-all"
-                />
               </div>
-            </div>
 
-            {/* STEP 4: Mode Anonim vs Tampilkan Nama */}
-            <div className="pt-2 border-t border-amber-900/10">
-              <div className="bg-amber-50/50 p-5 rounded-2xl border border-amber-200/60 space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <p className="font-display font-bold text-sm text-warm-ink">Privasi & Identitas Pengirim</p>
-                    <p className="text-xs text-warm-muted mt-0.5 leading-relaxed">
-                      {isAnonymous 
-                        ? "Identitasmu dirahasiakan 100%. Nama dan data pribadi tidak akan pernah dipublikasikan." 
-                        : `Namamu akan ditampilkan secara terbuka pada kartu ${isEvaluationMode ? 'evaluasi' : 'aspirasi'}.`}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-amber-200/80 shrink-0 self-start sm:self-auto shadow-2xs">
-                    <button
-                      type="button"
-                      onClick={() => setIsAnonymous(true)}
-                      className={cn(
-                        "px-3.5 py-1.5 rounded-xl text-xs font-display font-bold transition-all cursor-pointer",
-                        isAnonymous 
-                          ? "bg-warm-ink text-white shadow-warm-sm" 
-                          : "text-warm-muted hover:text-warm-ink hover:bg-amber-50"
-                      )}
-                    >
-                      🎭 Anonim (Rahasia)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsAnonymous(false)}
-                      className={cn(
-                        "px-3.5 py-1.5 rounded-xl text-xs font-display font-bold transition-all cursor-pointer",
-                        !isAnonymous 
-                          ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-warm-sm" 
-                          : "text-warm-muted hover:text-warm-ink hover:bg-amber-50"
-                      )}
-                    >
-                      👤 Tampilkan Nama
-                    </button>
-                  </div>
-                </div>
-
-                <AnimatePresence>
-                  {!isAnonymous && (
-                    <motion.div 
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="overflow-hidden pt-3 border-t border-amber-200/60"
-                    >
-                      <label htmlFor="authorName" className="block text-xs font-bold text-warm-ink mb-1.5">
-                        Nama Lengkap / Panggilan & Kelas Siswa
-                      </label>
-                      <div className="relative">
-                        <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-light" />
-                        <input
-                          id="authorName"
-                          type="text"
-                          required={!isAnonymous}
-                          value={authorName}
-                          onChange={e => setAuthorName(e.target.value)}
-                          placeholder="Contoh: Budi Santoso (XI IPS 1)"
-                          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-amber-400 text-sm font-medium text-warm-ink"
-                        />
-                      </div>
-                    </motion.div>
+              {/* Submit Button & Rate Limit Info */}
+              <div className="space-y-3">
+                <button
+                  type="submit"
+                  disabled={isSubmitting || limitReached}
+                  className={cn(
+                    "w-full flex items-center justify-center gap-3 py-4 px-6 text-white font-display font-bold text-base sm:text-lg rounded-2xl shadow-warm-lg transition-all cursor-pointer disabled:opacity-50",
+                    isEvaluationMode 
+                      ? "bg-purple-700 hover:bg-purple-800 shadow-glow-sky" 
+                      : "bg-gradient-to-r from-orange-500 via-rose-500 to-amber-500 hover:from-orange-600 hover:via-rose-600 hover:to-amber-600 shadow-glow-rose hover:scale-[1.01] active:scale-[0.99]"
                   )}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Friendly Guidelines */}
-            <div className="flex items-start gap-3 p-4 rounded-2xl bg-sky-50/70 border border-sky-100 text-xs leading-relaxed text-sky-950">
-              <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-              <div>
-                <strong className="font-bold text-sky-950">Komitmen Bersama: </strong>
-                <span>
-                  {isEvaluationMode
-                    ? 'Evaluasi yang disampaikan secara santun, objektif, dan konstruktif akan menjadi prioritas pembahasan rapat pengurus OSIS.'
-                    : 'Gunakan bahasa yang santun, saling menghargai, dan objektif demi menjaga lingkungan SMAN 1 Kemangkon yang harmonis dan menyenangkan.'}
-                </span>
-              </div>
-            </div>
-
-            {/* Submit Button & Rate Limit Info */}
-            <div className="space-y-3">
-              <button
-                type="submit"
-                disabled={isSubmitting || limitReached}
-                className={cn(
-                  "w-full flex items-center justify-center gap-3 py-4 px-6 text-white font-display font-bold text-base sm:text-lg rounded-2xl shadow-warm-lg transition-all cursor-pointer disabled:opacity-50",
-                  isEvaluationMode 
-                    ? "bg-purple-700 hover:bg-purple-800 shadow-glow-sky" 
-                    : "bg-gradient-to-r from-orange-500 via-rose-500 to-amber-500 hover:from-orange-600 hover:via-rose-600 hover:to-amber-600 shadow-glow-rose hover:scale-[1.01] active:scale-[0.99]"
-                )}
-              >
-                {isEvaluationMode ? <ClipboardCheck className="w-5 h-5" /> : <Send className="w-5 h-5" />}
-                <span>
-                  {isSubmitting 
-                    ? (isEvaluationMode ? 'Mengirim Lembar Evaluasi...' : 'Mengirimkan Aspirasi...') 
-                    : limitReached
-                      ? 'Batas Harian Tercapai (Reset 06:00 WIB)'
-                      : (isEvaluationMode ? 'Kirim Lembar Evaluasi ke OSIS' : 'Kirim Aspirasi Sekarang')}
-                </span>
-              </button>
+                >
+                  {isEvaluationMode ? <ClipboardCheck className="w-5 h-5" /> : <Send className="w-5 h-5" />}
+                  <span>
+                    {isSubmitting 
+                      ? (isEvaluationMode ? 'Mengirim Lembar Evaluasi...' : 'Mengirimkan Aspirasi...') 
+                      : limitReached
+                        ? 'Batas Harian Tercapai (Reset 06:00 WIB)'
+                        : (isEvaluationMode ? 'Kirim Lembar Evaluasi ke OSIS' : 'Kirim Aspirasi Sekarang')}
+                  </span>
+                </button>
               
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-warm-muted px-1 font-semibold text-center sm:text-left">
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Batas pengiriman: <strong>1× per hari per IP</strong></span>
-                </span>
-                <span>Reset otomatis pukul <strong>06:00 WIB</strong> ({remainingTimeText || 'Siklus harian'})</span>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-warm-muted px-1 font-semibold text-center sm:text-left">
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Batas pengiriman: <strong>1× per hari per IP</strong></span>
+                  </span>
+                  <span>Reset otomatis pukul <strong>06:00 WIB</strong> ({remainingTimeText || 'Siklus harian'})</span>
+                </div>
               </div>
-            </div>
-          </form>
-        </Reveal>
-      </div>
-
+            </form>
+          </Reveal>
+        </div>
       </div>
 
       {/* Official OSIS Helpdesk WhatsApp Card */}

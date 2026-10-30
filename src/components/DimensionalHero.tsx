@@ -71,19 +71,6 @@ export default function DimensionalHero({
 
         {/* Plane 2: the subject. */}
         <div className="lp-hero-subject text-center" data-sc-in data-sc-stagger="90">
-          <div className="mb-6 inline-flex items-center gap-2.5 rounded-2xl border border-white/90 bg-white/80 px-3 py-1.5 shadow-warm-sm backdrop-blur-sm">
-            <img
-              src="https://raw.githubusercontent.com/dapidd12/storage/main/tes/1788314699811-20260902_090434.png"
-              alt="Logo OSIS SMAN 1 Kemangkon"
-              width={28}
-              height={28}
-              className="h-7 w-7 object-contain"
-            />
-            <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-warm-muted">
-              {isEvaluationMode ? 'Kotak Evaluasi' : 'Kotak Curhat'} &middot; SMAN 1 Kemangkon
-            </span>
-          </div>
-
           <h1 className="mx-auto max-w-3xl text-balance font-display text-[2rem] font-black leading-[1.08] tracking-[-0.03em] text-warm-ink sm:text-5xl md:text-[3.6rem]">
             {isEvaluationMode ? (
               <>
