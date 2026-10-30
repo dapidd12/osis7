@@ -1,0 +1,6 @@
+Server running on http://localhost:3000
+10:36:58 PM [vite] (client) hmr update /src/components/PublicLayout.tsx, /src/index.css
+10:41:00 PM [vite] (client) hmr update /src/components/PublicLayout.tsx, /src/index.css
+10:42:08 PM [vite] (client) hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+10:42:26 PM [vite] (client) hmr update /src/components/AdminLayout.tsx, /src/index.css
+10:42:35 PM [vite] (client) hmr update /src/components/AdminLayout.tsx, /src/index.css
